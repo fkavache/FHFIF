@@ -3,6 +3,9 @@ project(FHFIF)
 
 set(CMAKE_CXX_STANDARD 17)
 
+include(cmake/Dependencies.cmake)
+include_directories("${PROJECT_SOURCE_DIR}/lib/include")
+
 file(GLOB SOURCE_FILES
         src/*.cpp)
 file(GLOB HEADER_FILES
@@ -10,4 +13,4 @@ file(GLOB HEADER_FILES
 
 add_library(FHFIF_lib STATIC ${HEADER_FILES} ${SOURCE_FILES})
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} FHFIF_lib)
+target_link_libraries(${PROJECT_NAME} FHFIF_lib ${SQLAPI})
