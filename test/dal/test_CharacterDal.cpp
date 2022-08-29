@@ -6,12 +6,12 @@
 #define USER     "postgres"
 #define PASSWORD "testpass"
 
-#define BLOO_NAME      "Blooregard Q. Kazoo"
-#define BLOO_NICKNAME  "Bloo"
-#define BLOO_AGE        20
-#define BLOO_SUGARCUBES 100
-#define BLOO_HOME       1
-#define BLOO_SPECIES    CHARACTER_SPECIES_IMAGINARY_FRIEND
+#define BLOO_NAME       "Blooregard Q. Kazoo"
+#define BLOO_NICKNAME   "Bloo"
+#define BLOO_AGE         20
+#define BLOO_SUGAR_CUBES 100
+#define BLOO_HOME        1
+#define BLOO_SPECIES     CHARACTER_SPECIES_IMAGINARY_FRIEND
 
 TEST_GROUP(TEST_CHARACTER_DAL){
     void setup() {
@@ -28,12 +28,12 @@ static Character createBloo(int id) {
     string sid = to_string(id);
 
     return {
-            BLOO_NAME + sid,
-            BLOO_NICKNAME + sid,
-            BLOO_AGE + id,
-            BLOO_SUGARCUBES + id,
-            BLOO_HOME + id,
-            BLOO_SPECIES
+        BLOO_NAME + sid,
+        BLOO_NICKNAME + sid,
+        BLOO_AGE + id,
+        BLOO_SUGAR_CUBES + id,
+        BLOO_HOME + id,
+        BLOO_SPECIES
     };
 }
 
@@ -44,7 +44,7 @@ static void checkBloo(Character &character, int id) {
     STRCMP_EQUAL((BLOO_NICKNAME + sid).c_str(), character.getNickname().c_str())
 
     LONGS_EQUAL(BLOO_AGE + id, character.getAge())
-    LONGS_EQUAL(BLOO_SUGARCUBES + id, character.getSugarCubes())
+    LONGS_EQUAL(BLOO_SUGAR_CUBES + id, character.getSugarCubes())
     LONGS_EQUAL(BLOO_HOME + id, character.getHomeID())
     LONGS_EQUAL(BLOO_SPECIES, character.getSpecies())
 }
@@ -128,7 +128,7 @@ TEST(TEST_CHARACTER_DAL, TEST_UPDATE) {
             STRCMP_EQUAL((BLOO_NICKNAME + sid2).c_str(), character.getNickname().c_str())
 
             LONGS_EQUAL(BLOO_AGE + id1, character.getAge())
-            LONGS_EQUAL(BLOO_SUGARCUBES + id1, character.getSugarCubes())
+            LONGS_EQUAL(BLOO_SUGAR_CUBES + id1, character.getSugarCubes())
             LONGS_EQUAL(BLOO_HOME + id1, character.getHomeID())
             LONGS_EQUAL(BLOO_SPECIES, character.getSpecies())
         } catch (SAException& ex) {
