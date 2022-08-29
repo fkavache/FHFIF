@@ -9,14 +9,17 @@ include_directories("${PROJECT_SOURCE_DIR}/lib/include")
 
 file(GLOB SOURCE_FILES
         src/*.cpp
-        src/dal/*.cpp)
+        src/dal/*.cpp
+        src/model/*.cpp)
 file(GLOB HEADER_FILES
         include/*.h
-        include/dal/*.h)
+        include/dal/*.h
+        include/model/*.h)
 file(GLOB TEST_FILES
         "test/*.h"
         "test/*.cpp"
-        "test/dal/*.cpp")
+        "test/dal/*.cpp"
+        "test/model/*.cpp")
 
 add_library(${PROJECT_NAME}_lib STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
