@@ -86,7 +86,6 @@ void DAL::rollback() {
 
 void DAL::disconnect() {
     m_con.Disconnect();
-    delete m_dal;
 }
 
 void DAL::throwException(const string& msg) {

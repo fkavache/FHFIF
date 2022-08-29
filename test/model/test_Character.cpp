@@ -11,7 +11,7 @@ TEST_GROUP(TEST_CHARACTER){};
 #define BLOO_HOME       1
 #define BLOO_SPECIES    CHARACTER_SPECIES_IMAGINARY_FRIEND
 
-Character createBloo(int id) {
+static Character createBloo(int id) {
     string sid = to_string(id);
 
     return {
@@ -24,19 +24,19 @@ Character createBloo(int id) {
     };
 }
 
-void checkBloo(Character &character, int id) {
+static void checkBloo(Character &character, int id) {
     string sid = to_string(id);
 
-    STRCMP_EQUAL(character.getFullname().c_str(), (BLOO_NAME + sid).c_str())
-    STRCMP_EQUAL(character.getNickname().c_str(), (BLOO_NICKNAME + sid).c_str())
+    STRCMP_EQUAL((BLOO_NAME + sid).c_str(), character.getFullname().c_str())
+    STRCMP_EQUAL((BLOO_NICKNAME + sid).c_str(), character.getNickname().c_str())
 
-    LONGS_EQUAL(character.getAge(), BLOO_AGE + id)
-    LONGS_EQUAL(character.getSugarCubes(), BLOO_SUGARCUBES + id)
-    LONGS_EQUAL(character.getHomeID(), BLOO_HOME + id)
-    LONGS_EQUAL(character.getSpecies(), BLOO_SPECIES)
+    LONGS_EQUAL(BLOO_AGE + id, character.getAge())
+    LONGS_EQUAL(BLOO_SUGARCUBES + id, character.getSugarCubes())
+    LONGS_EQUAL(BLOO_HOME + id, character.getHomeID())
+    LONGS_EQUAL(BLOO_SPECIES, character.getSpecies())
 }
 
-void updateBloo(Character &character, int id) {
+static void updateBloo(Character &character, int id) {
     string sid = to_string(id);
 
     character.setFullname(BLOO_NAME + sid);

@@ -14,7 +14,7 @@ TEST(TEST_DAL, TEST_CONNECT) {
             DAL::GetInstance()->connect(DB, USER, PASSWORD, SA_PostgreSQL_Client);
             DAL::GetInstance()->disconnect();
         } catch (SAException& ex) {
-            FAIL("Connection Failed")
+            FAIL(ex.ErrText())
         }
     }
 }
