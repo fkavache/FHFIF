@@ -51,12 +51,12 @@ Character CharacterDAL::selectByID(int id) {
 Entry CharacterDAL::characterToEntry(const Character &character) {
     Entry entry = {
             {
-                    Field(character.getFullname()),
-                    Field(character.getNickname()),
-                    Field(character.getAge()),
-                    Field(character.getSugarCubes()),
-                    Field(character.getHomeID()),
-                    Field(character.getSpecies())
+                Field(character.getFullname()),
+                Field(character.getNickname()),
+                Field(character.getAge()),
+                Field(character.getSugarCubes()),
+                Field(character.getHomeID()),
+                Field(character.getSpecies())
             }
     };
 

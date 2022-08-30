@@ -47,9 +47,9 @@ Home HomeDAL::selectByID(int id) {
 Entry HomeDAL::homeToEntry(const Home &home) {
     Entry entry = {
             {
-                    Field(home.getName()),
-                    Field(home.getSugarCubes()),
-                    Field(home.getUserID()),
+                Field(home.getName()),
+                Field(home.getSugarCubes()),
+                Field(home.getUserID()),
             }
     };
 
