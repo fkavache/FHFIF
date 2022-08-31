@@ -116,4 +116,20 @@ CStatus Controller::fetchUserHome(std::string &&email, Home &out) {
         Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
         return C_ERROR;
     }
-};
+}
+
+CStatus Controller::fetchUserCharacters(string&& email, vector<Character>& out) {
+    try {
+        User user = UserDAL::selectByEmail(email);
+        Home home = HomeDAL::selectByUserID(user.getID());
+
+        out = CharacterDAL::selectByHomeID(home.getID());
+
+        return C_SUCCESS;
+    } catch (SAException& ex) {
+        Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
+        return C_ERROR;
+    }
+}
+
+

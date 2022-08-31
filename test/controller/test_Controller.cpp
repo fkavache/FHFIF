@@ -104,3 +104,30 @@ TEST(TEST_CONTROLLER, TEST_FETCH_USER_HOME) {
         }
     }
 }
+
+TEST(TEST_CONTROLLER, TEST_FETCH_USER_CHARACTERS) {
+    {
+        try {
+            string token;
+            string email = USER_EMAIL;
+            string password = USER_PASSWORD;
+            vector<Character> characters;
+            CStatus status;
+
+            status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::fetchUserCharacters(USER_EMAIL, characters);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            auto user = UserDAL::selectByEmail(USER_EMAIL);
+            auto home = HomeDAL::selectByUserID(user.getID());
+
+            for (auto &character: characters) {
+                LONGS_EQUAL(home.getID(), character.getHomeID())
+            }
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}

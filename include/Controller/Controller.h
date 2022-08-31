@@ -23,6 +23,7 @@ public:
     static CStatus registerUser(string&& email, string&& password, string& token);
     static CStatus loginUser(string&& email, string&& password, string& token);
     static CStatus fetchUserHome(string&& email, Home& out);
+    static CStatus fetchUserCharacters(string&& email, vector<Character>& out);
 
     static bool isAuthorized(const string& token, string& email);
 private:
