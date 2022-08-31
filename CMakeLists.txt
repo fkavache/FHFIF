@@ -14,18 +14,21 @@ file(GLOB SOURCE_FILES
         src/*.cpp
         src/dal/*.cpp
         src/model/*.cpp
-        src/utils/*.cpp)
+        src/utils/*.cpp
+        src/controller/*.cpp)
 file(GLOB HEADER_FILES
         include/*.h
         include/dal/*.h
         include/model/*.h
-        uti)
+        include/utils/*.h
+        include/controller/*.h)
 file(GLOB TEST_FILES
-        "test/*.h"
-        "test/*.cpp"
-        "test/dal/*.cpp"
-        "test/model/*.cpp"
-        "test/utils/*.cpp")
+        test/*.h
+        test/*.cpp
+        test/dal/*.cpp
+        test/model/*.cpp
+        test/utils/*.cpp
+        test/controller/*.cpp)
 
 add_library(${PROJECT_NAME}_lib STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
