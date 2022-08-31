@@ -176,12 +176,10 @@ TEST(TEST_CONTROLLER, TEST_UPDATE_CHARACTER) {
     }
 }
 
-TEST(TEST_CONTROLLER, TEST_TRANSFER) {
+TEST(TEST_CONTROLLER, TEST_CHARACTER_TO_TRANSFER) {
     {
         try {
             string token;
-            string email = USER_EMAIL;
-            string password = USER_PASSWORD;
             vector<Transfer> transfers;
             CStatus status;
 
@@ -198,6 +196,40 @@ TEST(TEST_CONTROLLER, TEST_TRANSFER) {
             LONGS_EQUAL(1, transfers.size())
             LONGS_EQUAL(character.getID(), transfers[0].getCharacterID())
             LONGS_EQUAL(character.getSugarCubes(), transfers[0].getSugarCubes())
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}
+
+TEST(TEST_CONTROLLER, TEST_TRANSFER_CHARACTER) {
+    {
+        try {
+            string token;
+            CStatus status;
+
+            status = Controller::registerUser(USER_EMAIL + to_string(1), USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::registerUser(USER_EMAIL + to_string(2), USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            auto home = HomeDAL::selectByUserID(1);
+            auto character = CharacterDAL::selectByID(1);
+
+            status = Controller::characterToTransferList(USER_EMAIL + to_string(1), 1);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::transferCharacter(USER_EMAIL + to_string(2), 1, 2);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            auto transfers = TransferDAL::selectAll();
+            CHECK(transfers.empty())
+
+            Home oldHome = HomeDAL::selectByUserID(1);
+            Home newHome = HomeDAL::selectByUserID(2);
+            LONGS_EQUAL(home.getSugarCubes() + character.getSugarCubes(), oldHome.getSugarCubes())
+            LONGS_EQUAL(home.getSugarCubes() - character.getSugarCubes(), newHome.getSugarCubes())
         } catch (SAException& ex) {
             FAIL(ex.ErrText())
         }

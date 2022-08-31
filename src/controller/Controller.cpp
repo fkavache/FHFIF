@@ -10,18 +10,21 @@
 #define JWT_PAYLOAD_PASSWORD "password"
 #define JWT_LOGIN_EXPIRATION  30 * 60
 
-#define PLAYER_MIN_SUGAR_CUBES 100
-#define PLAYER_MAX_SUGAR_CUBES 10000
+#define CHARACTER_MIN_SUGAR_CUBES 100
+#define CHARACTER_MAX_SUGAR_CUBES 10000
 
 #define DEFAULT_HOME_NAME        "Foster's Home"
 #define DEFAULT_HOME_SUGAR_CUBES  20000000
+
+#define CHARACTER_MIN_SUGAR_INC 10
+#define CHARACTER_MAX_SUGAR_INC 100
 
 void Controller::createCharacters(int homeID, int N) {
     vector<Character> characterData = ControllerData::getCharacterData();
 
     while (N--) {
         int idx = Utils::getRandom(0, (int) characterData.size() - 1);
-        int sugarCubes = Utils::getRandom(PLAYER_MIN_SUGAR_CUBES, PLAYER_MAX_SUGAR_CUBES);
+        int sugarCubes = Utils::getRandom(CHARACTER_MIN_SUGAR_CUBES, CHARACTER_MAX_SUGAR_CUBES);
 
         Character character = characterData[idx];
         character.setSugarCubes(sugarCubes);
@@ -156,10 +159,10 @@ CStatus Controller::updateUserHome(string&& email, int id, string&& name) {
 CStatus Controller::updateUserCharacter(string&& email, int id, string&& fullname, string&& nickname) {
     try {
         User user = UserDAL::selectByEmail(email);
-        Home team = HomeDAL::selectByUserID(user.getID());
+        Home home = HomeDAL::selectByUserID(user.getID());
         Character character = CharacterDAL::selectByID(id);
 
-        if (character.getHomeID() == team.getID()) {
+        if (character.getHomeID() == home.getID()) {
             character.setFullname(std::move(fullname));
             character.setNickname(std::move(nickname));
 
@@ -181,10 +184,10 @@ CStatus Controller::updateUserCharacter(string&& email, int id, string&& fullnam
 CStatus Controller::characterToTransferList(string&& email, int id) {
     try {
         User user = UserDAL::selectByEmail(email);
-        Home team = HomeDAL::selectByUserID(user.getID());
+        Home home = HomeDAL::selectByUserID(user.getID());
         Character character = CharacterDAL::selectByID(id);
 
-        if (character.getHomeID() == team.getID()) {
+        if (character.getHomeID() == home.getID()) {
             TransferDAL::insert({id, character.getSugarCubes()});
 
             DAL::GetInstance()->commit();
@@ -207,6 +210,43 @@ CStatus Controller::fetchTransfers(vector<Transfer>& out) {
         return C_SUCCESS;
     } catch (SAException& ex) {
         Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
+        return C_ERROR;
+    }
+}
+
+CStatus Controller::transferCharacter(string&& email, int characterID, int newHomeID) {
+    try {
+        User user = UserDAL::selectByEmail(email);
+        Home home = HomeDAL::selectByUserID(user.getID());
+
+        if (home.getID() == newHomeID) {
+            Transfer transfer = TransferDAL::selectByCharacterID(characterID);
+            Character character = CharacterDAL::selectByID(characterID);
+            Home oldHome = HomeDAL::selectByID(character.getHomeID());
+            Home newHome = HomeDAL::selectByID(newHomeID);
+
+            HomeDAL::updateSugarCubes(oldHome.getID(), oldHome.getSugarCubes() + character.getSugarCubes());
+
+            int increase = Utils::getRandom(CHARACTER_MIN_SUGAR_INC, CHARACTER_MAX_SUGAR_INC);
+            int newSugarCubes = character.getSugarCubes() + character.getSugarCubes() * increase / 100;
+            CharacterDAL::updateHome(characterID, newHomeID);
+            CharacterDAL::updateSugarCubes(characterID, newSugarCubes);
+
+            HomeDAL::updateSugarCubes(newHome.getID(), newHome.getSugarCubes() - character.getSugarCubes());
+
+            TransferDAL::removeByCharacterID(characterID);
+
+            DAL::GetInstance()->commit();
+
+            (void) transfer;
+
+            return C_SUCCESS;
+        }
+
+        return C_AUTH_ERROR;
+    } catch (SAException& ex) {
+        Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
+        DAL::GetInstance()->rollback();
         return C_ERROR;
     }
 }
