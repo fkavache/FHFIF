@@ -157,3 +157,31 @@ TEST(TEST_CONTROLLER, TEST_UPDATE_HOME) {
         }
     }
 }
+
+TEST(TEST_CONTROLLER, TEST_UPDATE_CHARACTER) {
+    {
+        try {
+            int characterID = 1;
+            string newFullname = "Jackie Khones";
+            string newNickname = "The Talking Broccoli";
+
+            string token;
+            string email = USER_EMAIL;
+            string password = USER_PASSWORD;
+            vector<Character> characters;
+            CStatus status;
+
+            status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::updateUserCharacter(USER_EMAIL, characterID, newFullname.c_str(), newNickname.c_str());
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            auto character = CharacterDAL::selectByID(characterID);
+            STRCMP_EQUAL(newFullname.c_str(), character.getFullname().c_str())
+            STRCMP_EQUAL(newNickname.c_str(), character.getNickname().c_str())
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}

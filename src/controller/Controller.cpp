@@ -152,3 +152,28 @@ CStatus Controller::updateUserHome(string&& email, int id, string&& name) {
         return C_ERROR;
     }
 }
+
+CStatus Controller::updateUserCharacter(string&& email, int id, string&& fullname, string&& nickname) {
+    try {
+        User user = UserDAL::selectByEmail(email);
+        Home team = HomeDAL::selectByUserID(user.getID());
+        Character character = CharacterDAL::selectByID(id);
+
+        if (character.getHomeID() == team.getID()) {
+            character.setFullname(std::move(fullname));
+            character.setNickname(std::move(nickname));
+
+            CharacterDAL::update(id, character);
+
+            DAL::GetInstance()->commit();
+
+            return C_SUCCESS;
+        }
+
+        return C_AUTH_ERROR;
+    } catch (SAException& ex) {
+        Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
+        DAL::GetInstance()->rollback();
+        return C_ERROR;
+    }
+}
