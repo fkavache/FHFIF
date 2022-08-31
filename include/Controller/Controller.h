@@ -26,6 +26,7 @@ public:
     static CStatus fetchUserCharacters(string&& email, vector<Character>& out);
     static CStatus updateUserHome(string&& email, int id, string&& name);
     static CStatus updateUserCharacter(string&& email, int id, string&& fullname, string&& nickname);
+    static CStatus characterToTransferList(string&& email, int id);
 
     static bool isAuthorized(const string& token, string& email);
 private:

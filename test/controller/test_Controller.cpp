@@ -185,3 +185,30 @@ TEST(TEST_CONTROLLER, TEST_UPDATE_CHARACTER) {
         }
     }
 }
+
+TEST(TEST_CONTROLLER, TEST_CHARACTER_TO_TRANSFER) {
+    {
+        try {
+            string token;
+            string email = USER_EMAIL;
+            string password = USER_PASSWORD;
+            vector<Character> characters;
+            CStatus status;
+
+            status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::characterToTransferList(USER_EMAIL, 1);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            auto character = CharacterDAL::selectByID(1);
+
+            auto transfers = TransferDAL::selectAll();
+            LONGS_EQUAL(1, transfers.size())
+            LONGS_EQUAL(character.getID(), transfers[0].getCharacterID())
+            LONGS_EQUAL(character.getSugarCubes(), transfers[0].getSugarCubes())
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}
