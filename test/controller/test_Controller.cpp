@@ -82,3 +82,25 @@ TEST(TEST_CONTROLLER, TEST_LOGIN_USER) {
     }
 }
 
+TEST(TEST_CONTROLLER, TEST_FETCH_USER_HOME) {
+    {
+        try {
+            string token;
+            string email = USER_EMAIL;
+            string password = USER_PASSWORD;
+            Home home;
+            CStatus status;
+
+            status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::fetchUserHome(USER_EMAIL, home);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            auto user = UserDAL::selectByEmail(USER_EMAIL);
+            LONGS_EQUAL(user.getID(), home.getUserID())
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}

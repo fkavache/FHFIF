@@ -104,3 +104,16 @@ CStatus Controller::loginUser(string&& email, string&& password, string& token) 
         return C_ERROR;
     }
 }
+
+CStatus Controller::fetchUserHome(std::string &&email, Home &out) {
+    try {
+        User user = UserDAL::selectByEmail(email);
+
+        out = HomeDAL::selectByUserID(user.getID());
+
+        return C_SUCCESS;
+    } catch (SAException& ex) {
+        Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
+        return C_ERROR;
+    }
+};
