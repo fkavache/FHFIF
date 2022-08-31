@@ -16,7 +16,8 @@ TEST_GROUP(TEST_HOME_DAL){
     }
 
     void teardown() {
-        DAL::GetInstance()->rollback();
+        HomeDAL::truncate();
+        DAL::GetInstance()->commit();
         DAL::GetInstance()->disconnect();
     }
 };
@@ -132,6 +133,24 @@ TEST(TEST_HOME_DAL, TEST_UPDATE_SUGAR_CUBES) {
             auto home = HomeDAL::selectByID(retID);
 
             LONGS_EQUAL(sugarCubes, home.getSugarCubes())
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}
+
+TEST(TEST_HOME_DAL, TEST_TRUNCATE) {
+    {
+        try {
+            int id = 1;
+
+            HomeDAL::insert(createFosters(id));
+            HomeDAL::insert(createFosters(id));
+
+            HomeDAL::truncate();
+
+            auto homes = HomeDAL::selectAll();
+            LONGS_EQUAL(0, homes.size())
         } catch (SAException& ex) {
             FAIL(ex.ErrText())
         }

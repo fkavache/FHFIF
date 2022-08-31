@@ -20,4 +20,5 @@ public:
     static void update(int id, const Character& character);
     static void updateHome(int id, int homeId);
     static void updateSugarCubes(int id, int sugarCubes);
+    static void truncate();
 };

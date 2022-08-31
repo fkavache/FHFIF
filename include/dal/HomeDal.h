@@ -19,4 +19,5 @@ public:
     static Home selectByID(int id);
     static void updateName(int id, const string& name);
     static void updateSugarCubes(int id, int sugarCubes);
+    static void truncate();
 };

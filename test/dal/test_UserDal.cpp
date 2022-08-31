@@ -15,7 +15,8 @@ TEST_GROUP(TEST_USER_DAL){
     }
 
     void teardown() {
-        DAL::GetInstance()->rollback();
+        UserDAL::truncate();
+        DAL::GetInstance()->commit();
         DAL::GetInstance()->disconnect();
     }
 };
@@ -70,6 +71,24 @@ TEST(TEST_USER_DAL, TEST_SELECT_BY_EMAIL) {
 
             auto user2 = UserDAL::selectByEmail("email2");
             checkUser(user2, id2);
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}
+
+TEST(TEST_USER_DAL, TEST_TRUNCATE) {
+    {
+        try {
+            int id = 1;
+
+            UserDAL::insert(createUser(id));
+            UserDAL::insert(createUser(id));
+
+            UserDAL::truncate();
+
+            auto users = UserDAL::selectAll();
+            LONGS_EQUAL(0, users.size())
         } catch (SAException& ex) {
             FAIL(ex.ErrText())
         }

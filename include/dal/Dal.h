@@ -42,6 +42,7 @@ public:
     vector<Entry> select(string&& cmd, const Entry &entry = {});
     void update(string&& cmd, const DAL::Entry &entry);
     void remove(string&& cmd, const DAL::Entry &entry);
+    void truncate(string&& cmd);
     void commit();
     void rollback();
     void disconnect();

@@ -76,6 +76,12 @@ void DAL::remove(string&& cmd, const DAL::Entry &entry) {
     remove.Execute();
 }
 
+void DAL::truncate(string&& cmd) {
+    SACommand truncate(&m_con, _TSA(cmd.c_str()));
+
+    truncate.Execute();
+}
+
 void DAL::commit() {
     m_con.Commit();
 }

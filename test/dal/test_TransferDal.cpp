@@ -15,7 +15,8 @@ TEST_GROUP(TEST_TRANSFER_DAL){
     }
 
     void teardown() {
-        DAL::GetInstance()->rollback();
+        TransferDAL::truncate();
+        DAL::GetInstance()->commit();
         DAL::GetInstance()->disconnect();
     }
 };
@@ -67,6 +68,24 @@ TEST(TEST_TRANSFER_DAL, TEST_SELECT_BY_CHARACTER_ID) {
 
             auto transfer2 = TransferDAL::selectByCharacterID(13);
             checkTransfer(transfer2, id2);
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}
+
+TEST(TEST_TRANSFER_DAL, TEST_TRUNCATE) {
+    {
+        try {
+            int id = 1;
+
+            TransferDAL::insert(createTransfer(id));
+            TransferDAL::insert(createTransfer(id));
+
+            TransferDAL::truncate();
+
+            auto transfers = TransferDAL::selectAll();
+            LONGS_EQUAL(0, transfers.size())
         } catch (SAException& ex) {
             FAIL(ex.ErrText())
         }

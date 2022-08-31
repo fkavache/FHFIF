@@ -7,6 +7,7 @@
 #define CHARACTER_UPDATE_QUERY             "UPDATE characters SET fullname = (:1), nickname = (:2) WHERE id = (:3)"
 #define CHARACTER_UPDATE_HOME_QUERY        "UPDATE characters SET home_id = (:1) WHERE id = (:2)"
 #define CHARACTER_UPDATE_SUGAR_CUBES_QUERY "UPDATE characters SET sugar_cubes = (:1) WHERE id = (:2)"
+#define CHARACTER_TRUNCATE_QUERY           "TRUNCATE TABLE characters RESTART IDENTITY CASCADE"
 
 int CharacterDAL::insert(const Character &character) {
     return DAL::GetInstance()->insert(CHARACTER_INSERT_QUERY, characterToEntry(character));
@@ -104,4 +105,8 @@ void CharacterDAL::updateSugarCubes(int id, int sugarCubes) {
                     Field(id)
             }
     });
+}
+
+void CharacterDAL::truncate() {
+    DAL::GetInstance()->truncate(CHARACTER_TRUNCATE_QUERY);
 }

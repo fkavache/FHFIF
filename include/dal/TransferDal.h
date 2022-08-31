@@ -17,4 +17,5 @@ public:
     static vector<Transfer> selectAll();
     static Transfer selectByCharacterID(int characterId);
     static void removeByCharacterID(int characterId);
+    static void truncate();
 };

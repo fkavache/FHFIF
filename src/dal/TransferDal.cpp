@@ -4,6 +4,7 @@
 #define TRANSFER_SELECT_QUERY           "SELECT * FROM transfers"
 #define TRANSFER_SELECT_BY_PLAYER_QUERY "SELECT * FROM transfers WHERE character_id = (:1)"
 #define TRANSFER_REMOVE_BY_PLAYER_QUERY "DELETE FROM transfers WHERE character_id = (:1)"
+#define TRANSFER_TRUNCATE_QUERY         "TRUNCATE TABLE transfers RESTART IDENTITY CASCADE"
 
 int TransferDAL::insert(const Transfer &transfer) {
     return DAL::GetInstance()->insert(TRANSFER_INSERT_QUERY, transferToEntry(transfer));
@@ -56,4 +57,8 @@ Transfer TransferDAL::entryToTransfer(const Entry& entry) {
     transfer.setID(entry.fields[0].numeric);
 
     return transfer;
+}
+
+void TransferDAL::truncate() {
+    DAL::GetInstance()->truncate(TRANSFER_TRUNCATE_QUERY);
 }

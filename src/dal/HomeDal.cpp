@@ -6,6 +6,7 @@
 #define HOME_SELECT_BY_ID_QUERY       "SELECT * FROM homes WHERE id = (:1)"
 #define HOME_UPDATE_NAME_QUERY        "UPDATE homes SET name = (:1) WHERE id = (:2)"
 #define HOME_UPDATE_SUGAR_CUBES_QUERY "UPDATE homes SET sugar_cubes = (:1) WHERE id = (:2)"
+#define HOME_TRUNCATE_QUERY           "TRUNCATE TABLE homes RESTART IDENTITY CASCADE"
 
 int HomeDAL::insert(const Home &home) {
     return DAL::GetInstance()->insert(HOME_INSERT_QUERY, homeToEntry(home));
@@ -84,4 +85,8 @@ void HomeDAL::updateSugarCubes(int id, int sugarCubes) {
                     Field(id)
             }
     });
+}
+
+void HomeDAL::truncate() {
+    DAL::GetInstance()->truncate(HOME_TRUNCATE_QUERY);
 }

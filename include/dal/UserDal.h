@@ -16,4 +16,5 @@ public:
     static int insert(const User& user);
     static vector<User> selectAll();
     static User selectByEmail(const string& email);
+    static void truncate();
 };

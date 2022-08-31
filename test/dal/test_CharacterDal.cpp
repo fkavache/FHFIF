@@ -19,7 +19,8 @@ TEST_GROUP(TEST_CHARACTER_DAL){
     }
 
     void teardown() {
-        DAL::GetInstance()->rollback();
+        CharacterDAL::truncate();
+        DAL::GetInstance()->commit();
         DAL::GetInstance()->disconnect();
     }
 };
@@ -169,6 +170,24 @@ TEST(TEST_CHARACTER_DAL, TEST_UPDATE_SUGAR_CUBES) {
             auto character = CharacterDAL::selectByID(retID);
 
             LONGS_EQUAL(sugarCubes, character.getSugarCubes())
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}
+
+TEST(TEST_CHARACTER_DAL, TEST_TRUNCATE) {
+    {
+        try {
+            int id = 1;
+
+            CharacterDAL::insert(createBloo(id));
+            CharacterDAL::insert(createBloo(id));
+
+            CharacterDAL::truncate();
+
+            auto characters = CharacterDAL::selectAll();
+            LONGS_EQUAL(0, characters.size())
         } catch (SAException& ex) {
             FAIL(ex.ErrText())
         }

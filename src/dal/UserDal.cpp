@@ -3,6 +3,7 @@
 #define USER_INSERT_QUERY          "INSERT INTO users (e_mail, password) VALUES (:1, :2) RETURNING id"
 #define USER_SELECT_QUERY          "SELECT * FROM users"
 #define USER_SELECT_BY_EMAIL_QUERY "SELECT * FROM users WHERE e_mail = (:1)"
+#define USER_TRUNCATE_QUERY        "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
 
 int UserDAL::insert(const User &user) {
     return DAL::GetInstance()->insert(USER_INSERT_QUERY, userToEntry(user));
@@ -52,4 +53,8 @@ User UserDAL::entryToUser(const Entry& entry) {
     user.setID(entry.fields[0].numeric);
 
     return user;
+}
+
+void UserDAL::truncate() {
+    DAL::GetInstance()->truncate(USER_TRUNCATE_QUERY);
 }
