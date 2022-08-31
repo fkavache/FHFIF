@@ -10,6 +10,7 @@
 
 #define USER_EMAIL    "email"
 #define USER_PASSWORD "password"
+#define INCORRECT     "incorrect"
 
 TEST_GROUP(TEST_CONTROLLER){
     void setup() {
@@ -21,6 +22,7 @@ TEST_GROUP(TEST_CONTROLLER){
         TransferDAL::truncate();
         HomeDAL::truncate();
         UserDAL::truncate();
+        DAL::GetInstance()->commit();
         DAL::GetInstance()->disconnect();
     }
 };
@@ -32,7 +34,8 @@ TEST(TEST_CONTROLLER, TEST_REGISTER_USER) {
             string email = USER_EMAIL;
             string password = Utils::hash(USER_PASSWORD);
 
-            Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
+            CStatus status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
 
             CHECK(Controller::isAuthorized(token, email))
 
@@ -56,3 +59,26 @@ TEST(TEST_CONTROLLER, TEST_REGISTER_USER) {
         }
     }
 }
+
+TEST(TEST_CONTROLLER, TEST_LOGIN_USER) {
+    {
+        try {
+            string token;
+            string email = USER_EMAIL;
+            string password = USER_PASSWORD;
+            CStatus status;
+
+            status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::loginUser(USER_EMAIL, USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::loginUser(USER_EMAIL, INCORRECT, token);
+            LONGS_EQUAL(C_AUTH_ERROR, status)
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}
+

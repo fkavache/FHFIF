@@ -81,3 +81,26 @@ CStatus Controller::registerUser(string&& email, string&& password, string& toke
         return C_ERROR;
     }
 }
+
+CStatus Controller::loginUser(string&& email, string&& password, string& token) {
+    try {
+        User user = UserDAL::selectByEmail(email);
+
+        if (user.getPassword() == Utils::hash(password)) {
+            unordered_map<string, string> payload({
+                {JWT_PAYLOAD_EMAIL, email},
+                {JWT_PAYLOAD_PASSWORD, password}
+            });
+
+            token = Utils::JWTEncode(payload, JWT_LOGIN_EXPIRATION);
+
+            return C_SUCCESS;
+        }
+
+        return C_AUTH_ERROR;
+    } catch (SAException& ex) {
+        Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
+        DAL::GetInstance()->rollback();
+        return C_ERROR;
+    }
+}
