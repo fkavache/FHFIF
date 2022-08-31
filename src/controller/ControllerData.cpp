@@ -1,6 +1,6 @@
 #include "controller/ControllerData.h"
 
-// TODO vacheka
+// TODO: [vacheka] predefined
 static const vector<Character> characterData = {
         {"Blooregard Q. Kazoo", "Bloo", 22, 0, 0, CHARACTER_SPECIES_IMAGINARY_FRIEND},
         {"Cheese", "Scary Yellow Man",  20, 0, 0, CHARACTER_SPECIES_IMAGINARY_FRIEND},

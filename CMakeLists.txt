@@ -15,13 +15,15 @@ file(GLOB SOURCE_FILES
         src/dal/*.cpp
         src/model/*.cpp
         src/utils/*.cpp
-        src/controller/*.cpp)
+        src/controller/*.cpp
+        src/api/*.cpp)
 file(GLOB HEADER_FILES
         include/*.h
         include/dal/*.h
         include/model/*.h
         include/utils/*.h
-        include/controller/*.h)
+        include/controller/*.h
+        include/api/*.h)
 file(GLOB TEST_FILES
         test/*.h
         test/*.cpp

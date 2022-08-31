@@ -226,8 +226,8 @@ TEST(TEST_CONTROLLER, TEST_TRANSFER_CHARACTER) {
             auto transfers = TransferDAL::selectAll();
             CHECK(transfers.empty())
 
-            Home oldHome = HomeDAL::selectByUserID(1);
-            Home newHome = HomeDAL::selectByUserID(2);
+            auto oldHome = HomeDAL::selectByUserID(1);
+            auto newHome = HomeDAL::selectByUserID(2);
             LONGS_EQUAL(home.getSugarCubes() + character.getSugarCubes(), oldHome.getSugarCubes())
             LONGS_EQUAL(home.getSugarCubes() - character.getSugarCubes(), newHome.getSugarCubes())
         } catch (SAException& ex) {

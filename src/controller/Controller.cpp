@@ -3,7 +3,7 @@
 #include "utils/Utils.h"
 #include "utils/Log.h"
 
-// Todo vacheka
+// TODO: [vacheka] sys_params
 #define CONTROLLER_UNIT "CONTROLLER"
 
 #define JWT_PAYLOAD_EMAIL    "email"
