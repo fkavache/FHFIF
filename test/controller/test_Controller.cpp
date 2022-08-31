@@ -82,7 +82,7 @@ TEST(TEST_CONTROLLER, TEST_LOGIN_USER) {
     }
 }
 
-TEST(TEST_CONTROLLER, TEST_FETCH_USER_HOME) {
+TEST(TEST_CONTROLLER, TEST_FETCH_HOME) {
     {
         try {
             string token;
@@ -105,7 +105,7 @@ TEST(TEST_CONTROLLER, TEST_FETCH_USER_HOME) {
     }
 }
 
-TEST(TEST_CONTROLLER, TEST_FETCH_USER_CHARACTERS) {
+TEST(TEST_CONTROLLER, TEST_FETCH_CHARACTERS) {
     {
         try {
             string token;
@@ -126,6 +126,32 @@ TEST(TEST_CONTROLLER, TEST_FETCH_USER_CHARACTERS) {
             for (auto &character: characters) {
                 LONGS_EQUAL(home.getID(), character.getHomeID())
             }
+        } catch (SAException& ex) {
+            FAIL(ex.ErrText())
+        }
+    }
+}
+
+TEST(TEST_CONTROLLER, TEST_UPDATE_HOME) {
+    {
+        try {
+            int homeID = 1;
+            string newName = "Ben Foster's";
+
+            string token;
+            string email = USER_EMAIL;
+            string password = USER_PASSWORD;
+            vector<Character> characters;
+            CStatus status;
+
+            status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            status = Controller::updateUserHome(USER_EMAIL, homeID, newName.c_str());
+            LONGS_EQUAL(C_SUCCESS, status)
+
+            auto home = HomeDAL::selectByID(homeID);
+            STRCMP_EQUAL(newName.c_str(), home.getName().c_str())
         } catch (SAException& ex) {
             FAIL(ex.ErrText())
         }

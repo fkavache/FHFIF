@@ -24,6 +24,7 @@ public:
     static CStatus loginUser(string&& email, string&& password, string& token);
     static CStatus fetchUserHome(string&& email, Home& out);
     static CStatus fetchUserCharacters(string&& email, vector<Character>& out);
+    static CStatus updateUserHome(string&& email, int id, string&& name);
 
     static bool isAuthorized(const string& token, string& email);
 private:

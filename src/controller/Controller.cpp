@@ -132,4 +132,23 @@ CStatus Controller::fetchUserCharacters(string&& email, vector<Character>& out) 
     }
 }
 
+CStatus Controller::updateUserHome(string&& email, int id, string&& name) {
+    try {
+        User user = UserDAL::selectByEmail(email);
+        Home home = HomeDAL::selectByID(id);
 
+        if (home.getUserID() == user.getID()) {
+            HomeDAL::updateName(id, name);
+
+            DAL::GetInstance()->commit();
+
+            return C_SUCCESS;
+        }
+
+        return C_AUTH_ERROR;
+    } catch (SAException& ex) {
+        Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
+        DAL::GetInstance()->rollback();
+        return C_ERROR;
+    }
+}
