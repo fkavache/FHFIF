@@ -64,8 +64,6 @@ TEST(TEST_CONTROLLER, TEST_LOGIN_USER) {
     {
         try {
             string token;
-            string email = USER_EMAIL;
-            string password = USER_PASSWORD;
             CStatus status;
 
             status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
@@ -86,8 +84,6 @@ TEST(TEST_CONTROLLER, TEST_FETCH_HOME) {
     {
         try {
             string token;
-            string email = USER_EMAIL;
-            string password = USER_PASSWORD;
             Home home;
             CStatus status;
 
@@ -109,8 +105,6 @@ TEST(TEST_CONTROLLER, TEST_FETCH_CHARACTERS) {
     {
         try {
             string token;
-            string email = USER_EMAIL;
-            string password = USER_PASSWORD;
             vector<Character> characters;
             CStatus status;
 
@@ -139,9 +133,6 @@ TEST(TEST_CONTROLLER, TEST_UPDATE_HOME) {
             string newName = "Ben Foster's";
 
             string token;
-            string email = USER_EMAIL;
-            string password = USER_PASSWORD;
-            vector<Character> characters;
             CStatus status;
 
             status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
@@ -168,7 +159,6 @@ TEST(TEST_CONTROLLER, TEST_UPDATE_CHARACTER) {
             string token;
             string email = USER_EMAIL;
             string password = USER_PASSWORD;
-            vector<Character> characters;
             CStatus status;
 
             status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
@@ -186,13 +176,13 @@ TEST(TEST_CONTROLLER, TEST_UPDATE_CHARACTER) {
     }
 }
 
-TEST(TEST_CONTROLLER, TEST_CHARACTER_TO_TRANSFER) {
+TEST(TEST_CONTROLLER, TEST_TRANSFER) {
     {
         try {
             string token;
             string email = USER_EMAIL;
             string password = USER_PASSWORD;
-            vector<Character> characters;
+            vector<Transfer> transfers;
             CStatus status;
 
             status = Controller::registerUser(USER_EMAIL, USER_PASSWORD, token);
@@ -203,7 +193,8 @@ TEST(TEST_CONTROLLER, TEST_CHARACTER_TO_TRANSFER) {
 
             auto character = CharacterDAL::selectByID(1);
 
-            auto transfers = TransferDAL::selectAll();
+            status = Controller::fetchTransfers(transfers);
+            LONGS_EQUAL(C_SUCCESS, status)
             LONGS_EQUAL(1, transfers.size())
             LONGS_EQUAL(character.getID(), transfers[0].getCharacterID())
             LONGS_EQUAL(character.getSugarCubes(), transfers[0].getSugarCubes())

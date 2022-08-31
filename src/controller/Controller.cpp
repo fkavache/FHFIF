@@ -199,3 +199,14 @@ CStatus Controller::characterToTransferList(string&& email, int id) {
         return C_ERROR;
     }
 }
+
+CStatus Controller::fetchTransfers(vector<Transfer>& out) {
+    try {
+        out = TransferDAL::selectAll();
+
+        return C_SUCCESS;
+    } catch (SAException& ex) {
+        Log::LOG_ERROR(CONTROLLER_UNIT, (string) ex.ErrText());
+        return C_ERROR;
+    }
+}
