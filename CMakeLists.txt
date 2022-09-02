@@ -10,6 +10,10 @@ include_directories("${PROJECT_SOURCE_DIR}/lib/include")
 find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
+# TODO: [vacheka]
+include_directories("C:/boost/include/boost-1_79")
+link_directories("C:/boost/lib")
+
 file(GLOB SOURCE_FILES
         src/*.cpp
         src/dal/*.cpp
