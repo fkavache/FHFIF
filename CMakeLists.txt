@@ -34,7 +34,8 @@ file(GLOB TEST_FILES
         test/dal/*.cpp
         test/model/*.cpp
         test/utils/*.cpp
-        test/controller/*.cpp)
+        test/controller/*.cpp
+        test/api/*.cpp)
 
 add_library(${PROJECT_NAME}_lib STATIC ${HEADER_FILES} ${SOURCE_FILES})
 

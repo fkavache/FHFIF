@@ -2,6 +2,7 @@
 #include "dal/CharacterDal.h"
 #undef _L
 
+// TODO: [vacheka] config
 #define DB       "localhost@fhfif_test"
 #define USER     "postgres"
 #define PASSWORD "testpass"
